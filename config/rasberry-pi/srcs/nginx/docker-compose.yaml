@@ -1,0 +1,21 @@
+
+######################################
+#                                    #
+#  Author: Nathan "Gun8hoot" Clavel  #
+#  Purpose: Homelab Nginx            #
+#                                    #
+######################################
+
+service:
+  nginx:
+    build: ./srcs/
+    ports:
+      - 0.0.0.0:80:80
+      - 0.0.0.0:443:443
+    networks:
+      - internal
+
+network:
+  internal:
+    external: true
+    name: "homelab-internal-network"

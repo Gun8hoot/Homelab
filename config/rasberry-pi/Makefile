@@ -2,7 +2,7 @@
 NAME													:= Rasberry Pi
 
 DOCKER_COMPOSE								:= docker compose
-DOCKER_COMPOSE_CONFIG_PATH		:= ./docker_compose.yaml
+DOCKER_COMPOSE_CONFIG_PATH		:= ./srcs/docker_compose.yaml
 DOCKER_COMPOSE_PARAM					:= -f $(DOCKER_COMPOSE_CONFIG_PATH)
 
 all: $(NAME)
