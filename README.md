@@ -25,11 +25,11 @@ This repository is a dedicated to explain what compose my homelab and how i have
 
 <h2>Services</h2>
 
-- (Pi-hole)[./docs/en/pi-hole.md] : A DNS server who can blocked DNS request to adventising server and act like a simple DNS server
-- (Jellyfin)[./docs/en/jellyfin.md] : A streaming server
-- (Forgejo)[./docs/en/forgejo.md] : An host localy and opensource alternative to Github
-- (Nginx)[./docs/en/nginx.md] : A simple reverse proxy that i olso use as a static server for my portal
-- (Kuma)[./docs/en/kuma.md] : An uptime manager that send me a discord message through a webhook if one of those services are done
+- [Pi-hole](./docs/en/pi-hole.md) : A DNS server who can blocked DNS request to adventising server and act like a simple DNS server
+- [Jellyfin](./docs/en/jellyfin.md) : A streaming server
+- [Forgejo](./docs/en/forgejo.md) : An host localy and opensource alternative to Github
+- [Nginx](./docs/en/nginx.md) : A simple reverse proxy that i olso use as a static server for my portal
+- [Kuma](./docs/en/kuma.md) : An uptime manager that send me a discord message through a webhook if one of those services are done
 
 <div align="center">
 	<h1>MSI laptop</h1>
