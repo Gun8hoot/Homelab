@@ -1,0 +1,12 @@
+
+services:
+  webserver:
+    container_name: homelab-webserver
+    build:
+      context: ./
+    ports:
+      - "3000:3000/tcp"
+    restart: unless-stopped
+    networks:
+      - isolated
+      - internet_access

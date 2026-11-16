@@ -1,1 +1,12 @@
 
+include:
+    - ./nginx/docker-compose.yaml
+    - ./webserver/docker-compose.yaml
+    - ./pihole/docker-compose.yaml
+    - ./kuma/docker-compose.yaml
+
+networks:
+    internet_access:
+      driver: bridge
+    isolated:
+      internal: true
