@@ -4,6 +4,7 @@ include:
     - ./webserver/docker-compose.yaml
     - ./pihole/docker-compose.yaml
     - ./kuma/docker-compose.yaml
+    - ./vaultwarden/docker-compose.yaml
 
 networks:
     internet_access:
