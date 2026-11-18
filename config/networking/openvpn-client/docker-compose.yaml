@@ -1,0 +1,27 @@
+
+services:
+  vpn:
+    container_name: homelab-vpn-client
+    image: dperson/openvpn-client:latest
+    cap_add:
+      - net_admin
+    restart: unless-stopped
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./vpn-config:/vpn
+    security_opt:
+      - label:disable
+    ports:
+      - 8001:8001
+      - 8002:8002
+      - 8003:8003
+    networks:
+      - bridge_vpn
+    entrypoint: ["/sbin/tini", "--", "/usr/bin/openvpn.sh", "-d"]
+  # curl:
+  #   image: alpine/curl
+  #   container_name: curl
+  #   restart: unless-stopped
+  #   network_mode: service:vpn
+networks:
+  bridge_vpn:

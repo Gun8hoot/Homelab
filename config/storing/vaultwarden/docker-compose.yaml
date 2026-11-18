@@ -1,0 +1,11 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: homelab-vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://vault.homelab.lan"
+    volumes:
+      - ${VOLUMES_LOCATION}/vaultwarden:/data/
+    networks:
+      - nginx_network

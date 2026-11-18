@@ -1,0 +1,30 @@
+
+# DISABLE SERVICES BY COMMENTING HIS LINE
+include:
+    # --- MEDIA SERVICES ---
+    # - ./media/docker-compose.yaml
+
+    # --- NETWORKING SERVICES ---
+    - ./networking/nginx/docker-compose.yaml
+    # - ./networking/pihole/docker-compose.yaml
+    # - ./networking/wireguard/docker-compose.yaml
+    # ---------------------------
+
+    # --- MONITORING SERVICES ---
+    - ./monitoring/kuma/docker-compose.yaml
+    # ---------------------------
+
+    # --- STORING SERVICES ---
+    - ./storing/forgejo/docker-compose.yaml
+    - ./storing/smb-server/docker-compose.yaml
+    #- ./storing/overleaf/docker-compose.yaml
+    - ./storing/vaultwarden/docker-compose.yaml
+    # ------------------------
+
+    # --- STORING SERVICES ---
+    - ./landing_page/docker-compose.yaml
+
+networks:
+    network_access: {}
+    nginx_network:
+      internal: true

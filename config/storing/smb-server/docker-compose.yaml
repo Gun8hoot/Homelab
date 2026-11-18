@@ -1,0 +1,18 @@
+
+services:
+  samba:
+    image: dockurr/samba
+    container_name: homelab-samba
+    environment:
+      UID: "1000"
+      GID: "1000"
+      NAME: ${SMB_NAME}
+      USER: ${SMB_USER}
+      PASS: ${SMB_PASS}
+    ports:
+      - 445:445
+    volumes:
+      - ${SMB_PATH}:/shared
+    restart: always
+    networks:
+      - network_access

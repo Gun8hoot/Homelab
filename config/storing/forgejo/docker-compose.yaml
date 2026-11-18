@@ -1,0 +1,42 @@
+
+services:
+  forgejo:
+    container_name: homelab-forgejo
+    image: codeberg.org/forgejo/forgejo:17
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - FORGEJO__database__DB_TYPE=postgres
+      - FORGEJO__database__HOST=forgejo_database:5432
+      - FORGEJO__database__NAME=forgejo
+      - FORGEJO__database__USER=${FORGEJO_DATABASE_USER}
+      - FORGEJO__database__PASSWD=${FORGEJO_DATABASE_PASS}
+      - HTTP_PORT=8080
+    networks:
+      - nginx_network
+      - forgejo-isolated
+    volumes:
+      - ${VOLUMES_LOCATION}/forgejo_data:/var/lib/gitea
+      - /etc/localtime:/etc/localtime:ro
+      - ./app.ini:/etc/forgejo/app.ini
+    depends_on:
+      - forgejo_database
+    restart: unless-stopped
+
+  forgejo_database:
+    container_name: homelab-forgejo-database
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=${FORGEJO_DATABASE_USER}
+      - POSTGRES_PASSWORD=${FORGEJO_DATABASE_PASS}
+      - POSTGRES_DB=forgejo
+    networks:
+      - forgejo-isolated
+    volumes:
+      - ${VOLUMES_LOCATION}/forgejo_database:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+networks:
+  forgejo-isolated:
+    external: false

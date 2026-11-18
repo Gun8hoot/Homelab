@@ -1,0 +1,11 @@
+
+services:
+  kuma:
+    container_name: homelab-kuma
+    image: louislam/uptime-kuma:2.5.11-slim
+    volumes:
+      - ${VOLUMES_LOCATION}/kuma:/app/data
+    restart: unless-stopped
+    networks:
+      - network_access
+      - nginx_network

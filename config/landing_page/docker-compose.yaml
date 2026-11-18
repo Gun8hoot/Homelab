@@ -1,0 +1,10 @@
+
+services:
+  webserver:
+    container_name: homelab-webserver
+    build:
+      context: ./
+    restart: unless-stopped
+    networks:
+      - nginx_network
+      - network_access

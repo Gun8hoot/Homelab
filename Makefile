@@ -1,57 +1,41 @@
 
 NAME						:= Homelab
 
-DOCKER						:= docker
+ENV_LOCATION				:= ./config/.env
+DOCKER_COMPOSE_LOCATION		:= ./config/docker-compose.yaml
+DOCKER_COMPOSE				:= docker compose --env-file $(ENV_LOCATION) --file $(DOCKER_COMPOSE_LOCATION)
 
-RASBERRYPI_MAKE_LOCATION	:= ./config/rasberry-pi
-DELL_MAKE_LOCATION			:= ./config/dell-laptop
-ASUS_MAKE_LOCATION			:= ./config/asus-laptop
+all: up
 
-all:
-	@printf "Usage:\n\t- rasberry : Launched every services who run on my rasberry pi\n\t- dell : Launched every services who run on my dell laptop\n"
+$(NAME): up
 
 # --- DOCKER RULES ---
-up: rasberry-up dell-up asus-up
+up:
+	@$(DOCKER_COMPOSE) up --build -d
+	@printf "\e[32m[+] Every services have successfully started!\e[0m\n"
 
-down: rasberry-down dell-down asus-down
+down:
+	@$(DOCKER_COMPOSE) down
+	@printf "\e[32m[+] Every services have successfully stopped!\e[0m\n"
 
-logs: rasberry-logs dell-logs asus-logs
+logs:
+	@printf "\e[32m[+] Showing every services logs\e[0m\n"
+	@$(DOCKER_COMPOSE) logs
+	@printf "\e[32m--- END OF LOGS ---\e[0m\n"
 
 ps:
-	@$(DOCKER) ps
+	@printf "\e[32m[+] Showing every $(NAME) launched services\e[0m\n"
+	@$(DOCKER_COMPOSE) ps
+	@printf "\e[32m--- END OF LAUNCHED SERVICES LIST ---\e[0m\n"
 
 re: down up
 # --------------------
 
-# --- UP RULES ---
-rasberry-up:
-	@make -C $(RASBERRYPI_MAKE_LOCATION) up
-
-dell-up:
-	@make -C $(DELL_MAKE_LOCATION) up
-
-asus-up:
-	@make -C $(ASUS_MAKE_LOCATION) up
-# ---------------
-
-# --- DOWN RULES ---
-rasberry-down:
-	@make -C $(RASBERRYPI_MAKE_LOCATION) down
-
-dell-down:
-	@make -C $(DELL_MAKE_LOCATION) down
-
-asus-down:
-	@make -C $(ASUS_MAKE_LOCATION) down
-# ---------------
-
-# --- LOGS RULES ---
-rasberry-logs:
-	@make -C $(RASBERRYPI_MAKE_LOCATION) logs
-asus-logs:
-	@make -C $(ASUS_MAKE_LOCATION) logs
-dell-logs:
-	@make -C $(DELL_MAKE_LOCATION) logs
-# ---------------
+# --- OTHER RULES ---
+cert:
+	# https://www.ibm.com/docs/en/ibm-mq/7.5.0?topic=certificates-distinguished-names
+	@openssl req -x509 -nodes -days 365 -newkey rsa:4096 -subj "/C=FR/ST=<REDACTED>/L=<REDACTED>/O=Homelaberzzz/OU=Admin/CN=homelab" -keyout ./secrets/privkey.pem -out ./secrets/fullchain.pem > /dev/null
+	@printf "\e[32m[+] New certificated have been created for 1 years\n\e[0m"
+# --------------------
 
 .PHONY: up down re ps logs
