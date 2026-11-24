@@ -34,6 +34,7 @@ re: down up
 # --- OTHER RULES ---
 cert:
 	# https://www.ibm.com/docs/en/ibm-mq/7.5.0?topic=certificates-distinguished-names
+	@mkdir ./secrets
 	@openssl req -x509 -nodes -days 365 -newkey rsa:4096 -subj "/C=FR/ST=<REDACTED>/L=<REDACTED>/O=Homelaberzzz/OU=Admin/CN=homelab" -keyout ./secrets/privkey.pem -out ./secrets/fullchain.pem > /dev/null
 	@printf "\e[32m[+] New certificated have been created for 1 years\n\e[0m"
 # --------------------

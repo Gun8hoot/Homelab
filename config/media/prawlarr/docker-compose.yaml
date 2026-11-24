@@ -1,0 +1,17 @@
+---
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: homelab-prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${VOLUMES_LOCATION}/prowlarr:/config
+    ports:
+      - ${PROWLARR_PORT}:9696
+    restart: unless-stopped
+    networks:
+      # - nginx_network
+      - network_access

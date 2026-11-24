@@ -1,11 +1,5 @@
 .env
 secrets
 volumes
-media
-prowlarr.homelab.lan.conf
-qbit.homelab.lan.conf
-radarr.homelab.lan.conf
-sonarr.homelab.lan.conf
-jellyfin.homelab.lan.conf
-seerr.homelab.lan.conf
 data
+node_modules

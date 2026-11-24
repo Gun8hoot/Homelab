@@ -1,0 +1,11 @@
+services:
+  anki-sync:
+    image: jeankhawand/anki-sync-server:26.08
+    container_name: homelab-anki-sync
+    restart: unless-stopped
+    environment:
+      SYNC_USER1: "${ANKI_USER}:${ANKI_PASS}"
+    volumes:
+      - ${VOLUMES_LOCATION}/anki-sync:/anki_data/
+    networks:
+      - nginx_network

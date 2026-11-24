@@ -1,0 +1,83 @@
+worker_processes auto;
+
+events { worker_connections 1024; }
+
+#stream {
+#    # Docker's embedded DNS, needed to resolve $pihole_dns
+#    resolver 127.0.0.11 valid=10s;
+#
+#    map "" $pihole_dns { default "${PIHOLE_IP}"; }
+#    map "" $forgejo_ssh_ip { default "${FORGEJO_IP}"; }
+#    map "" $forgejo_ssh_port { default "${FORGEJO_SSH_PORT}"; }
+#
+#    server {
+#        listen 22;
+#        proxy_pass $forgejo_ssh_ip:$forgejo_ssh_port;
+#    }
+#
+#    server {
+#        listen 53 udp;
+#        listen 53;
+#        proxy_pass $pihole_dns:53;
+#    }
+#}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    # Docker's embedded DNS, used to resolve the variable upstreams
+    # (map "" $service) at request time instead of startup
+    resolver 127.0.0.11 valid=10s;
+
+    # --- LOG ---
+    # log_format main '$remote_addr - [$time_local] "$request" $status $body_bytes_sent '
+    #                 '"$http_referer" "$http_user_agent" cf_ray=$http_cf_ray rt=$request_time';
+    access_log /dev/stdout;
+    error_log  /dev/stderr;
+
+    # --- DEFINING VARIABLES ---
+    # Values injected by envsubst at image build time (see the Dockerfile).
+    # Usage in a server block: proxy_pass http://$kuma:3001;
+    map "" $jellyfin    { default "${JELLYFIN_IP}"; }
+    map "" $pihole      { default "${PIHOLE_IP}"; }
+    map "" $forgejo     { default "${FORGEJO_IP}"; }
+    map "" $prowlarr    { default "${PROWLARR_IP}"; }
+    map "" $qbittorrent { default "${QBITTORRENT_IP}"; }
+    map "" $radarr      { default "${RADARR_IP}"; }
+    map "" $seerr       { default "${SEERR_IP}"; }
+    map "" $sonarr      { default "${SONARR_IP}"; }
+    map "" $kuma        { default "${KUMA_IP}"; }
+    map "" $landing     { default "${LANDING_IP}"; }
+    map "" $proxmox     { default "${PROXMOX_IP}"; }
+    map "" $vaultwarden { default "${VAULTWARDEN_IP}"; }
+    map "" $anki_sync   { default "${ANKI_IP}"; }
+    map "" $engram      { default "${ENGRAM_IP}"; }
+
+    # --- TLS ---
+    ssl_protocols             TLSv1.2 TLSv1.3;
+    ssl_ciphers               ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache         shared:SSL:10m;
+    ssl_session_timeout       1d;
+    ssl_session_tickets       on;
+
+    ssl_certificate           /cert/fullchain.pem;
+    ssl_certificate_key       /cert/privkey.pem;
+
+    # --- SERVERS ---
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name _;
+        return 301 https://$host$request_uri;
+    }
+
+    # HTTPS
+    server {
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name _;
+    }
+    include       /etc/nginx/sites-enabled/*;
+}

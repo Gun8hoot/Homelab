@@ -1,7 +1,7 @@
 
 services:
-  webserver:
-    container_name: homelab-webserver
+  landing_page:
+    container_name: homelab-landing_page
     build:
       context: ./
     restart: unless-stopped

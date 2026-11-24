@@ -2,26 +2,33 @@
 # DISABLE SERVICES BY COMMENTING HIS LINE
 include:
     # --- MEDIA SERVICES ---
-    # - ./media/docker-compose.yaml
+    # - ./media/jellyfin/docker-compose.yml
+    # - ./media/prawlarr/docker-compose.yaml
+    # - ./media/qbittorent/docker-compose.yaml
+    # - ./media/radarr/docker-compose.yaml
+    # - ./media/sonarr/docker-compose.yaml
+    # - ./media/seerr/docker-compose.yaml
 
-    # --- NETWORKING SERVICES ---
-    - ./networking/nginx/docker-compose.yaml
-    # - ./networking/pihole/docker-compose.yaml
-    # - ./networking/wireguard/docker-compose.yaml
+    # --- NETWORK SERVICES ---
+    - ./network/nginx/docker-compose.yaml
+    # - ./network/pihole/docker-compose.yaml
+    # - ./network/wireguard/docker-compose.yaml
     # ---------------------------
 
     # --- MONITORING SERVICES ---
-    - ./monitoring/kuma/docker-compose.yaml
+    # - ./monitor/kuma/docker-compose.yaml
     # ---------------------------
 
-    # --- STORING SERVICES ---
-    - ./storing/forgejo/docker-compose.yaml
-    - ./storing/smb-server/docker-compose.yaml
-    #- ./storing/overleaf/docker-compose.yaml
-    - ./storing/vaultwarden/docker-compose.yaml
+    # --- STORAGE SERVICES ---
+    # - ./storage/forgejo/docker-compose.yaml
+    # - ./storage/smb-server/docker-compose.yaml
+    #- ./storage/overleaf/docker-compose.yaml
+    # - ./storage/vaultwarden/docker-compose.yaml
+    # - ./storage/anki-sync/docker-compose.yaml
+    - ./storage/engram/docker-compose.yaml
     # ------------------------
 
-    # --- STORING SERVICES ---
+    # --- LANDING PAGE SERVICES ---
     - ./landing_page/docker-compose.yaml
 
 networks:

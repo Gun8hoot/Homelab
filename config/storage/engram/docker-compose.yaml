@@ -1,0 +1,52 @@
+
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${ENGRAM_DB_USER:-user}
+      POSTGRES_PASSWORD: ${ENGRAM_DB_PASS:-secret}
+      POSTGRES_DB: engram
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ENGRAM_DB_USER:-user} -d engram"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - ${VOLUMES_LOCATION}/engram_database:/var/lib/postgresql
+    networks:
+      - engram_internal
+
+  # The engram image runs as 10001:10001, but Docker creates missing volume
+  # directories as root:root, so the media folder must be handed over first.
+  media_init:
+    image: alpine:3.22
+    restart: "no"
+    user: root
+    command: chown -R 10001:10001 /data/media
+    volumes:
+      - ${VOLUMES_LOCATION}/engram:/data/media
+
+  engram:
+    image: nite07/engram:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      media_init:
+        condition: service_completed_successfully
+    environment:
+      DB_DRIVER: postgres
+      DB_DSN: "postgres://${ENGRAM_DB_USER:-user}:${ENGRAM_DB_PASS:-secret}@db:5432/engram?sslmode=disable"
+      SESSION_SECRET: "${ENGRAM_SESSION_SECRET}"
+      ENCRYPTION_KEY: "${ENGRAM_ENCRYPTED_KEY}"
+      BASE_URL: "${ENGRAM_BASEURL:-engram.example.com}"
+    volumes:
+      - ${VOLUMES_LOCATION}/engram:/data/media
+    networks:
+      - engram_internal
+      - nginx_network
+
+networks:
+  engram_internal:
+    external: false

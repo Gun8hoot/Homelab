@@ -1,0 +1,74 @@
+
+services:
+  nginx:
+    container_name: homelab-nginx
+    build:
+      context: ./
+    environment:
+      # Every backend service IP/port, substituted into the config
+      # by the entrypoint at startup (see files/entrypoint.sh)
+      LANDING_IP: ${LANDING_IP}
+      LANDING_PORT: ${LANDING_PORT}
+      JELLYFIN_IP: ${JELLYFIN_IP}
+      JELLYFIN_PORT: ${JELLYFIN_PORT}
+      PROWLARR_IP: ${PROWLARR_IP}
+      PROWLARR_PORT: ${PROWLARR_PORT}
+      QBITTORRENT_IP: ${QBITTORRENT_IP}
+      QBITTORRENT_WEB_PORT: ${QBITTORRENT_WEB_PORT}
+      QBITTORRENT_TORRENTTING_PORT: ${QBITTORRENT_TORRENTTING_PORT}
+      RADARR_IP: ${RADARR_IP}
+      RADARR_PORT: ${RADARR_PORT}
+      SEERR_IP: ${SEERR_IP}
+      SEERR_PORT: ${SEERR_PORT}
+      SONARR_IP: ${SONARR_IP}
+      SONARR_PORT: ${SONARR_PORT}
+      KUMA_IP: ${KUMA_IP}
+      KUMA_PORT: ${KUMA_PORT}
+      PIHOLE_IP: ${PIHOLE_IP:-pihole}
+      PIHOLE_WEB_PORT: ${PIHOLE_WEB_PORT}
+      FORGEJO_IP: ${FORGEJO_IP}
+      FORGEJO_WEB_PORT: ${FORGEJO_WEB_PORT}
+      FORGEJO_SSH_PORT: ${FORGEJO_SSH_PORT}
+      PROXMOX_IP: ${PROXMOX_IP}
+      PROXMOX_PORT: ${PROXMOX_PORT}
+      # Service IPs without a .env entry get a container-name default
+      VAULTWARDEN_IP: ${VAULTWARDEN_IP:-vaultwarden}
+      ANKI_IP: ${ANKI_IP:-anki-sync}
+      ENGRAM_IP: ${ENGRAM_IP:-engram}
+      # Extra sites for services living outside the compose stack
+      NGINX_EXTRA_SITES: ${NGINX_EXTRA_SITES:-}
+    ports:
+      # SSH
+      - "22:22/tcp"
+
+      # DNS
+      # - "53:53"
+
+      # HTTP/HTTPS
+      - "80:80/tcp"
+      - "443:443/tcp"
+    restart: unless-stopped
+    networks:
+      - network_access
+      - nginx_network
+    volumes:
+      # Master compose file, scanned at startup to know which
+      # services are enabled (see files/entrypoint.sh)
+      - type: bind
+        source: ../../docker-compose.yaml
+        target: /etc/nginx/stack.yaml
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${SSL_CERTIFICATE_LOCATION}
+        target: /cert/fullchain.pem
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${SSL_KEY_LOCATION}
+        target: /cert/privkey.pem
+        read_only: true
+        bind:
+          create_host_path: false

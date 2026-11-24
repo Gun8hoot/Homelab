@@ -1,0 +1,17 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: homelab-radarr
+    ports:
+      - ${RADARR_PORT}:${RADARR_PORT}
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${VOLUMES_LOCATION}/radarr:/config
+      - ${MEDIA_DIRECTORY_LOCATION}/${MEDIA_MOVIE_DIRECTORY_NAME}:/movies
+    restart: unless-stopped
+    networks:
+      - nginx_network
+      - network_access
