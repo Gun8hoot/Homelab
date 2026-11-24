@@ -3,12 +3,13 @@
 </div>
 
 <div align="center">
-	<a href="./docs"><img width=120px rel="Badge 'Still in build'" src="https://img.shields.io/badge/Still%20in%20build-FFAA00">
-	<a href="./FR_README.md"><p>🇫🇷 • French version</p></a>
-	<a href="./docs"><img width=120px rel="Badge 'Documentation'" src="https://img.shields.io/badge/Documentations-0000AA">
+	<a href="./FR_README.md"><p>🇫 • French version</p></a>
+	<a href="./docs"><p>Documentation</p></a>
 </a>
 </div>
 
+> [!WARNING]
+> Im still building the project, some part can be missing
 
 <div align="center">
 	<h2>Description</h2>
@@ -48,7 +49,7 @@ Everything is containerized with Docker Compose. NGINX acts as the single entry 
 	<p><i>Schema representing a request done by a client</i></p>
 	<br>
 	<img rel="Network schema" src="./assets/schema/network.png"/>
-	<p><i>Schema of my network with VLAN</p>
+	<p><i>Schema of my network with VLAN</i></p>
 	<br>
 </div>
 
